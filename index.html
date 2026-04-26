@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Personal Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    </head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1><i class="fas fa-chart-line"></i> Tracker</h1>
+                <p>All-in-One Personal Manager</p>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" onclick="showSection('dashboard')">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showSection('expenses')">
+                        <i class="fas fa-wallet"></i>
+                        <span>Expenses</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showSection('budget')">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Budget</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showSection('goals')">
+                        <i class="fas fa-bullseye"></i>
+                        <span>Goals & Savings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showSection('tasks')">
+                        <i class="fas fa-tasks"></i>
+                        <span>Tasks</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showSection('habits')">
+                        <i class="fas fa-fire"></i>
+                        <span>Habits</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showSection('subscriptions')">
+                        <i class="fas fa-sync"></i>
+                        <span>Subscriptions</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showSection('time')">
+                        <i class="fas fa-clock"></i>
+                        <span>Time Tracker</span>
+                    </a>
+                </li>
+            </ul>
+
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-moon"></i>
+                <span>Toggle Theme</span>
+            </button>
+
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- =====================================================
+                 DASHBOARD SECTION
+            ===================================================== -->
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <h2>Dashboard Overview</h2>
+                    <p>Your complete financial and productivity summary</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card success">
+                        <div class="stat-label">Total Income</div>
+                        <div class="stat-value" id="dashTotalIncome">$0</div>
+                    </div>
+                    <div class="stat-card danger">
+                        <div class="stat-label">Total Expenses</div>
+                        <div class="stat-value" id="dashTotalExpenses">$0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Net Balance</div>
+                        <div class="stat-value" id="dashNetBalance">$0</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-label">Active Goals</div>
+                        <div class="stat-value" id="dashActiveGoals">0</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Quick Stats</h3>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Pending Tasks</div>
+                            <div class="stat-value" id="dashPendingTasks">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Active Habits</div>
+                            <div class="stat-value" id="dashActiveHabits">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Subscriptions</div>
+                            <div class="stat-value" id="dashSubscriptions">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Hours This Week</div>
+                            <div class="stat-value" id="dashHoursWeek">0h</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 EXPENSE TRACKER SECTION
+            ===================================================== -->
+            <section id="expenses" class="section">
+                <div class="section-header">
+                    <h2>Expense Tracker</h2>
+                    <p>Track your income and expenses</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Transaction</h3>
+                    </div>
+                    <form id="expenseForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Type</label>
+                                <select class="form-select" id="expenseType" required>
+                                    <option value="expense">Expense</option>
+                                    <option value="income">Income</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Amount</label>
+                                <input type="number" class="form-input" id="expenseAmount" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" id="expenseCategory" required>
+                                    <option value="Food">Food</option>
+                                    <option value="Transport">Transport</option>
+                                    <option value="Shopping">Shopping</option>
+                                    <option value="Bills">Bills</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Health">Health</option>
+                                    <option value="Salary">Salary</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <input type="text" class="form-input" id="expenseDesc" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-input" id="expenseDate" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Transaction
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Transactions</h3>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenseTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 BUDGET TRACKER SECTION
+            ===================================================== -->
+            <section id="budget" class="section">
+                <div class="section-header">
+                    <h2>Budget Tracker</h2>
+                    <p>Set and monitor category budgets</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Set Budget</h3>
+                    </div>
+                    <form id="budgetForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" id="budgetCategory" required>
+                                    <option value="Food">Food</option>
+                                    <option value="Transport">Transport</option>
+                                    <option value="Shopping">Shopping</option>
+                                    <option value="Bills">Bills</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Health">Health</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Monthly Budget</label>
+                                <input type="number" class="form-input" id="budgetAmount" step="0.01" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Set Budget
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Budget Overview</h3>
+                    </div>
+                    <div id="budgetOverview"></div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 GOALS & SAVINGS TRACKER SECTION
+            ===================================================== -->
+            <section id="goals" class="section">
+                <div class="section-header">
+                    <h2>Goals & Savings</h2>
+                    <p>Track your financial goals</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Create Goal</h3>
+                    </div>
+                    <form id="goalForm">
+                        <div class="form-group">
+                            <label class="form-label">Goal Name</label>
+                            <input type="text" class="form-input" id="goalName" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Target Amount</label>
+                                <input type="number" class="form-input" id="goalTarget" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Deadline</label>
+                                <input type="date" class="form-input" id="goalDeadline" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Create Goal
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Your Goals</h3>
+                    </div>
+                    <div id="goalsList"></div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 TASK MANAGEMENT SECTION (KANBAN)
+            ===================================================== -->
+            <section id="tasks" class="section">
+                <div class="section-header">
+                    <h2>Task Management</h2>
+                    <p>Organize tasks with Kanban board</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Task</h3>
+                    </div>
+                    <form id="taskForm">
+                        <div class="form-group">
+                            <label class="form-label">Task Title</label>
+                            <input type="text" class="form-input" id="taskTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-textarea" id="taskDesc"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Task
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="kanban-board">
+                        <div class="kanban-column">
+                            <div class="kanban-column-header">
+                                <i class="fas fa-circle" style="color: #3b82f6;"></i> To Do
+                            </div>
+                            <div class="kanban-tasks" id="todoTasks" ondrop="drop(event)" ondragover="allowDrop(event)" data-status="todo"></div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="kanban-column-header">
+                                <i class="fas fa-circle" style="color: #f59e0b;"></i> In Progress
+                            </div>
+                            <div class="kanban-tasks" id="progressTasks" ondrop="drop(event)" ondragover="allowDrop(event)" data-status="progress"></div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="kanban-column-header">
+                                <i class="fas fa-circle" style="color: #10b981;"></i> Done
+                            </div>
+                            <div class="kanban-tasks" id="doneTasks" ondrop="drop(event)" ondragover="allowDrop(event)" data-status="done"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 HABIT TRACKER SECTION
+            ===================================================== -->
+            <section id="habits" class="section">
+                <div class="section-header">
+                    <h2>Habit Tracker</h2>
+                    <p>Build and track daily habits</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Habit</h3>
+                    </div>
+                    <form id="habitForm">
+                        <div class="form-group">
+                            <label class="form-label">Habit Name</label>
+                            <input type="text" class="form-input" id="habitName" placeholder="e.g., Morning Exercise" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Habit
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Your Habits</h3>
+                    </div>
+                    <div id="habitsList"></div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 SUBSCRIPTION TRACKER SECTION
+            ===================================================== -->
+            <section id="subscriptions" class="section">
+                <div class="section-header">
+                    <h2>Subscription Tracker</h2>
+                    <p>Manage your recurring subscriptions</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Subscription</h3>
+                    </div>
+                    <form id="subscriptionForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Service Name</label>
+                                <input type="text" class="form-input" id="subName" placeholder="e.g., Netflix" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Monthly Cost</label>
+                                <input type="number" class="form-input" id="subCost" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Renewal Date</label>
+                                <input type="date" class="form-input" id="subRenewal" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Subscription
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Active Subscriptions</h3>
+                        <div class="stat-card">
+                            <div class="stat-label">Monthly Total</div>
+                            <div class="stat-value" id="subTotal">$0</div>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Cost</th>
+                                    <th>Renewal Date</th>
+                                    <th>Days Until Renewal</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subscriptionTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================================
+                 TIME TRACKER SECTION
+            ===================================================== -->
+            <section id="time" class="section">
+                <div class="section-header">
+                    <h2>Time Tracker</h2>
+                    <p>Log and analyze your time</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Log Time</h3>
+                    </div>
+                    <form id="timeForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Activity</label>
+                                <input type="text" class="form-input" id="timeActivity" placeholder="e.g., Study" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Hours</label>
+                                <input type="number" class="form-input" id="timeHours" step="0.5" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-input" id="timeDate" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-clock"></i> Log Time
+                        </button>
+                    </form>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Today's Hours</div>
+                        <div class="stat-value" id="timeTodayHours">0h</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">This Week</div>
+                        <div class="stat-value" id="timeWeekHours">0h</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">This Month</div>
+                        <div class="stat-value" id="timeMonthHours">0h</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Time Log</h3>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Activity</th>
+                                    <th>Hours</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timeTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
